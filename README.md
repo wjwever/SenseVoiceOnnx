@@ -1,4 +1,4 @@
-<h1 align="center">SenseVoicOnnx </h1>
+<h1 align="center">SenseVoiceOnnx </h1>
 <div class="column" align="middle">
   <p align="center">
   </p>
