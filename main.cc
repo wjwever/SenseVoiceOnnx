@@ -160,6 +160,15 @@ int main() {
         std::vector<float> data;
         int32_t sampling_rate = 16000;
         load_wav_file(wav.c_str(), &sampling_rate, data);
+    
+
+        std::vector<float> tmp;
+        for(auto i : data) {
+            tmp.push_back(i  * 37268);
+        }
+        std::cout << "AsrResult:" << asr->_sence_voice->recog(tmp) << std::endl;
+        
+
         for (int i = 0; i < data.size() / 512; ++i) {
           std::vector<float> tmp(data.begin() + i * 512, data.begin() + i * 512 + 512);
           asr->push_data(tmp, sampling_rate);

@@ -26,10 +26,10 @@ class Asr {
         std::thread _th;
         std::function<void(const std::string& asr)> _onAsr;
         void wait_finish();
+        std::unique_ptr<SenseVoice> _sence_voice;
 
     private:
         std::unique_ptr<SileroVAD> _vad;
-        std::unique_ptr<SenseVoice> _sence_voice;
         std::deque<float> _deque;
         std::vector<float> _curWav;
         std::mutex _mx;

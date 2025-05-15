@@ -252,7 +252,7 @@ std::string SenseVoice::infer(const std::vector<float>& fbank) {
 
     dims.clear();
     dims.push_back(1);
-    int32_t text_norm = without_itn_;
+    int32_t text_norm = with_itn_;
     auto text_norm_ort = Ort::Value::CreateTensor<int32_t>(
         memory_info,
         &text_norm,
