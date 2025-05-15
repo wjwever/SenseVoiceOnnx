@@ -140,18 +140,18 @@ bool load_wav_file(const char *filename, int32_t *sampling_rate,
 }
 
 void onAsr(const std::string& asr) {
-  std::cout << "asr:" << asr << std::endl;
+  std::cout << "asr:" << asr << "\n------------" << std::endl;
 }
 
 
 int main() {
     try {
         // 初始化推理引擎
-        std::string asr_onnx = "sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17/model.onnx";
+        std::string asr_onnx = "sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17/model.int8.onnx";
         std::string tokens = "sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17/tokens.txt";
         std::string vad_onnx = "silero_vad.onnx";
 
-        std::string wav = "../test.wav";
+        std::string wav = "test.wav";
 
         auto asr = std::make_unique<Asr>(asr_onnx, tokens, vad_onnx);
         asr->_onAsr = onAsr;
@@ -164,7 +164,7 @@ int main() {
           std::vector<float> tmp(data.begin() + i * 512, data.begin() + i * 512 + 512);
           asr->push_data(tmp, sampling_rate);
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        asr->wait_finish();
     }
     catch (const std::exception &e)
     {

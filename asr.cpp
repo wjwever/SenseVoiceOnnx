@@ -63,6 +63,13 @@ void Asr::push_data(const std::vector<float>& data, int inputRate) {
     }
 }
 
+
+void Asr::wait_finish() {
+    std::unique_lock<std::mutex> lk(_mx);
+    _cv.wait(lk, [this]{return _deque.size() <= 512;}); 
+    _running.store(true);
+}
+
 void Asr::run() {
     int idx = 0;
     while(_running.load()) {
@@ -70,11 +77,13 @@ void Asr::run() {
         {
             std::lock_guard<std::mutex> lk(_mx);
             data.clear(); 
-            if (_deque.size() > 512) {
+            if (_deque.size() >= 512) {
                 for (int i = 0; i < 512; ++i) {
                     data.push_back(_deque.front());
                     _deque.pop_front();
                 }
+            } else {
+                _cv.notify_all(); 
             }
         }
         if (data.size() == 512) {
@@ -97,6 +106,13 @@ void Asr::run() {
             } else if (_curWav.size() > 0) {
                 _curWav.insert(_curWav.end(), data.begin(), data.end()); 
             }
+        }
+    }
+
+    if (_curWav.size() > 0)  {
+        auto result = _sence_voice->recog(_curWav);
+        if (_onAsr) {
+            _onAsr(result);
         }
     }
     std::cout << "Asr run exit" <<std::endl;

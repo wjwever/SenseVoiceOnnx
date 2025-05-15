@@ -7,6 +7,7 @@
 #include <thread>
 #include "sense_voice.h"
 #include "vad.h"
+#include <condition_variable>
 
 using silero_vad::SileroVAD;
 
@@ -24,6 +25,7 @@ class Asr {
         std::atomic<bool> _running;
         std::thread _th;
         std::function<void(const std::string& asr)> _onAsr;
+        void wait_finish();
 
     private:
         std::unique_ptr<SileroVAD> _vad;
@@ -31,4 +33,5 @@ class Asr {
         std::deque<float> _deque;
         std::vector<float> _curWav;
         std::mutex _mx;
+        std::condition_variable _cv;
 };

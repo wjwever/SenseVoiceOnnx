@@ -88,7 +88,7 @@ public:
     // Construction
     SileroVAD(const std::string& ModelPath,
         SampleRate Sample_rate = SampleRate::SR_16K, FrameMS window_frame_ms = FrameMS::WS_32,
-        float Threshold = 0.5, const std::chrono::milliseconds& min_silence_duration_ms = std::chrono::milliseconds(200),
+        float Threshold = 0.65, const std::chrono::milliseconds& min_silence_duration_ms = std::chrono::milliseconds(200),
         const std::chrono::milliseconds& speech_pad_ms = std::chrono::milliseconds(30), 
         const std::chrono::milliseconds& min_speech_duration_ms = std::chrono::milliseconds(64),
         const std::chrono::seconds&  max_speech_duration_s = std::chrono::seconds(std::numeric_limits<int64_t>::max()));
